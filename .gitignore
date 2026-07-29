@@ -8,6 +8,9 @@ Saved/
 *.opensdf
 *.sdf
 DumpStack.log
-Backup*
 .gitignore.save
-UpgradeLog*
+Backup/
+Backup1/
+Backup2/
+*.log
+UpgradeLog*.htm
