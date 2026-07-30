@@ -2,8 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/ArrowComponent.h"
 #include "Tracker.generated.h"
-
 class UStaticMeshComponent;
 UCLASS()
 class RADIALTRIGGER_API ATracker : public AActor
@@ -15,6 +15,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* TrackerMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	UArrowComponent* Arrow;
 
 protected:
 	virtual void BeginPlay() override;

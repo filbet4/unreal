@@ -5,6 +5,8 @@ ATracker::ATracker()
 	PrimaryActorTick.bCanEverTick = true;
 	TrackerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("trackerMesh"));
 	RootComponent = TrackerMesh;
+	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+	Arrow->SetupAttachment(RootComponent);
 }
 
 void ATracker::BeginPlay()

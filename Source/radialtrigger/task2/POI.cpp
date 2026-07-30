@@ -16,36 +16,53 @@ void APOI::BeginPlay()
 		DynamicMaterial = UMaterialInstanceDynamic::Create(Material, this);
 		POIMesh->SetMaterial(0, DynamicMaterial);
 	}
-
+	StartLocation = GetActorLocation();	
 }
 
 void APOI::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
 
-	if(!tracker)
-	{
-		return;
-	}
-	FVector Direction = (GetActorLocation() - tracker->GetActorLocation()).GetSafeNormal();
-	FVector Forward = tracker->GetActorForwardVector();
+    if (!tracker || !DynamicMaterial)
+    {
+        return;
+    }
 
-	float dot = FVector::DotProduct(Direction, Forward);
-	
-	const float edge = 0.1f;
+    RunningTime += DeltaTime;
 
-	if (dot > edge)
-	{
-		DynamicMaterial->SetVectorParameterValue(TEXT("color"), FLinearColor::Green);
-	}
-	else if (dot < -edge)
-	{
-		DynamicMaterial->SetVectorParameterValue(TEXT("color"), FLinearColor::Red);
-	}
-	else
-	{
-		DynamicMaterial->SetVectorParameterValue(TEXT("color"), FLinearColor::Yellow);
-	}
-	
+    FVector NewLocation = StartLocation;
+    NewLocation.X += FMath::Cos(RunningTime * Speed) * Amplitude;
+    NewLocation.Y += FMath::Sin(RunningTime * Speed) * Amplitude;
+    SetActorLocation(NewLocation);
+
+    FVector Direction =
+        (GetActorLocation() - tracker->GetActorLocation()).GetSafeNormal();
+
+    FVector Forward = tracker->GetActorForwardVector();
+
+    float Dot = FVector::DotProduct(Direction, Forward);
+
+    float T = (Dot + 1.f) * 0.5f;
+
+    FLinearColor Color;
+
+    if (T < 0.5f)
+    {
+        Color = FLinearColor::LerpUsingHSV(
+            FLinearColor::Red,
+            FLinearColor::Yellow,
+            T * 2.f);
+    }
+    else
+    {
+        Color = FLinearColor::LerpUsingHSV(
+            FLinearColor::Yellow,
+            FLinearColor::Green,
+            (T - 0.5f) * 2.f);
+    }
+
+    DynamicMaterial->SetVectorParameterValue(ColorParameter, Color);
 }
+
+
 

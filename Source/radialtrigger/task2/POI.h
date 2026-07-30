@@ -26,6 +26,20 @@ public:
 	UMaterialInterface* Material;
 	
 	UMaterialInstanceDynamic* DynamicMaterial;
+
+	float RunningTime = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float Speed = 1.f;
+
+	UPROPERTY(EditAnywhere)
+	float Amplitude = 300.f;
+
+	FVector StartLocation;
+
+
+	UPROPERTY(EditDefaultsOnly, Category = "Material")
+	FName ColorParameter = TEXT("color");
 protected:
 	virtual void BeginPlay() override;
 
