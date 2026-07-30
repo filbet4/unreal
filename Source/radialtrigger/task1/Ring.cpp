@@ -3,6 +3,7 @@
 
 #include "Components/StaticMeshComponent.h"
 #include "Materials/MaterialInterface.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 ARing::ARing()
 {
@@ -15,27 +16,39 @@ ARing::ARing()
 void ARing::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (Material)
+	{
+		DynamicMaterial = UMaterialInstanceDynamic::Create(Material, this);
+		RingMesh->SetMaterial(0, DynamicMaterial);
+		DynamicMaterial->SetVectorParameterValue(TEXT("color"), FLinearColor::Blue);
+	}
 }
 
 void ARing::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!Ball)
+	if (!Ball || !DynamicMaterial)
 	{
 		return;
 	}
+	FVector RingLocation = GetActorLocation();
+	FVector BallLocation = Ball->GetActorLocation();
 
-	float DistanceX = GetActorLocation().X - Ball->GetActorLocation().X;
-	float DistanceY = GetActorLocation().Y - Ball->GetActorLocation().Y;
-	float Distance = sqrt(pow(DistanceX, 2) + pow(DistanceY, 2));
+	float DX = RingLocation.X - BallLocation.X;
+	float DY = RingLocation.Y - BallLocation.Y;
 
-	if (Distance <= Radius)
+	float DistanceSquared = DX * DX + DY * DY;
+	float RadiusSquared = Radius * Radius;
+
+
+	if (DistanceSquared <= RadiusSquared)
 	{
-		RingMesh->SetMaterial(0, Green);
+		DynamicMaterial->SetVectorParameterValue(ColorParameter, FLinearColor::Green);
 	}
 	else
 	{
-		RingMesh->SetMaterial(0, Red);
+		DynamicMaterial->SetVectorParameterValue(ColorParameter, FLinearColor::Red);
 	}
 }

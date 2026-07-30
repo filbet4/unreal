@@ -17,9 +17,9 @@ public:
 	ARing();
 
 	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
 
 protected:
-	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* RingMesh;
@@ -33,8 +33,11 @@ public:
 	float Radius = 300.f;
 
 	UPROPERTY(EditAnywhere)
-	UMaterialInterface* Green;
+	UMaterialInterface* Material;
 
-	UPROPERTY(EditAnywhere)
-	UMaterialInterface* Red;
+	UMaterialInstanceDynamic* DynamicMaterial;
+
+	UPROPERTY(EditDefaultsOnly)
+	FName ColorParameter = TEXT("color");
+
 };

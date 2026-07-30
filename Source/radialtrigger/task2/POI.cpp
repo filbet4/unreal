@@ -9,7 +9,6 @@ APOI::APOI()
 
 void APOI::BeginPlay()
 {
-	UE_LOG(LogTemp, Warning, TEXT("POI BeginPlay"));
 	Super::BeginPlay();
 	if (Material)
 	{
@@ -40,9 +39,9 @@ void APOI::Tick(float DeltaTime)
 
     FVector Forward = tracker->GetActorForwardVector();
 
-    float Dot = FVector::DotProduct(Direction, Forward);
+    float dot = FVector::DotProduct(Direction, Forward);
 
-    float T = (Dot + 1.f) * 0.5f;
+    float T = (dot + 1.f) * 0.5f;
 
     FLinearColor Color;
 
